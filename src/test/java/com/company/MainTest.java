@@ -49,7 +49,24 @@ class MainTest {
         return Stream.of(
                 Arguments.of("slo1.in", "slo1.out"),
                 Arguments.of("slo2.in", "slo2.out"),
-                Arguments.of("slo3.in", "slo3.out")
+                Arguments.of("slo3.in", "slo3.out"),
+                Arguments.of("slo1.in", "slo1.out"),
+                Arguments.of("slo1ocen.in", "slo1ocen.out"),
+                Arguments.of("slo2.in", "slo2.out"),
+                Arguments.of("slo2ocen.in", "slo2ocen.out"),
+                Arguments.of("slo3.in", "slo3.out"),
+                Arguments.of("slo3ocen.in", "slo3ocen.out"),
+                Arguments.of("slo4.in", "slo4.out"),
+                Arguments.of("slo4ocen.in", "slo4ocen.out"),
+                Arguments.of("slo5.in", "slo5.out"),
+                Arguments.of("slo6.in", "slo6.out"),
+                Arguments.of("slo7.in", "slo7.out"),
+                Arguments.of("slo8a.in", "slo8a.out"),
+                Arguments.of("slo8b.in", "slo8b.out"),
+                Arguments.of("slo9a.in", "slo9a.out"),
+                Arguments.of("slo9b.in", "slo9b.out"),
+                Arguments.of("slo10a.in", "slo10a.out"),
+                Arguments.of("slo10b.in", "slo10b.out")
         );
     }
 }

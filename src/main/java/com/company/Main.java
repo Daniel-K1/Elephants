@@ -7,6 +7,8 @@ import java.util.List;
 
 public class Main {
 
+    private static long globalMinWeight;
+
     public static void main(String[] args) {
 
         try {
@@ -15,19 +17,17 @@ public class Main {
             e.printStackTrace();
         }
 
+        globalMinWeight = findGlobalMinimumWeight();
         List<List<Integer>> cycles = convertToSingleCycles();
-
         System.out.println(findOptimum(cycles));
     }
 
-    private static int findOptimum(List<List<Integer>> cycles) {
+    private static long findOptimum(List<List<Integer>> cycles) {
 
-        int result = 0;
+        long result = 0;
         for (List<Integer> cycle : cycles) {
 
-            if (cycle.size() > 1) {
-                result += Math.min(calculateByDividingCycles(cycle), calculateByMergingCycles(cycle));
-            }
+            result += Math.min(calculateByDividingCycles(cycle), calculateByMergingCycles(cycle));
         }
 
         return result;
@@ -36,56 +36,49 @@ public class Main {
     private static List<List<Integer>> convertToSingleCycles() {
 
         List<List<Integer>> simpleCycles = new ArrayList<>();
-        List<Integer> singleSimpleCycle = new ArrayList<>();
 
-        for (int i = 0; i < DataContainer.getInstance().getActualOrder().size(); i++) {
-            if (DataContainer.getInstance().getActualOrder().get(i).equals(DataContainer.getInstance().getTargetOrder().get(i))) {
-                singleSimpleCycle.add(DataContainer.getInstance().getActualOrder().get(i));
-                simpleCycles.add(new ArrayList<>(singleSimpleCycle));
-                singleSimpleCycle.clear();
-                DataContainer.getInstance().getTargetOrder().remove(i);
-                DataContainer.getInstance().getActualOrder().remove(i);
-            }
+        int[] permutation = new int[DataContainer.getInstance().getNumberOfElephants() + 1];
+
+        for (int i = 0; i < DataContainer.getInstance().getNumberOfElephants(); i++) {
+
+            permutation[DataContainer.getInstance().getTargetOrder().get(i)]
+                    = DataContainer.getInstance().getActualOrder().get(i);
         }
 
-        while (DataContainer.getInstance().getActualOrder().size() != 0) {
-            int buffer;
-            int position = 0;
-            singleSimpleCycle.add(DataContainer.getInstance().getActualOrder().get(0));
-            buffer = DataContainer.getInstance().getTargetOrder().get(0);
+        boolean[] visited = new boolean[DataContainer.getInstance().getNumberOfElephants() + 1];
 
-            while (!singleSimpleCycle.contains(buffer)) {
+        List<Integer> singleSimpleCycle = new ArrayList<>();
+        for (int i = 1; i < DataContainer.getInstance().getNumberOfElephants(); i++) {
+            singleSimpleCycle.clear();
 
-                singleSimpleCycle.add(buffer);
-                DataContainer.getInstance().getActualOrder().remove(position);
-                DataContainer.getInstance().getTargetOrder().remove(position);
-                position = DataContainer.getInstance().getActualOrder().indexOf(buffer);
-                buffer = DataContainer.getInstance().getTargetOrder().get(position);
+            if (!visited[i]) {
+                int x = i;
+                while (!visited[x]) {
+                    visited[x] = true;
+                    singleSimpleCycle.add(x);
+                    x = permutation[x];
+                }
             }
 
-            simpleCycles.add(new ArrayList<>(singleSimpleCycle));
-            singleSimpleCycle.clear();
-            DataContainer.getInstance().getActualOrder().remove(position);
-            DataContainer.getInstance().getTargetOrder().remove(position);
+            if (singleSimpleCycle.size() > 1) {
+                simpleCycles.add(new ArrayList<>(singleSimpleCycle));
+            }
         }
 
         return simpleCycles;
     }
 
-    private static int calculateByDividingCycles(List<Integer> cycle) {
+    private static long calculateByDividingCycles(List<Integer> cycle) {
 
-        int result = 0;
-
+        long result = 0;
         result += sumElephantsWeightsIn(cycle);
-
         result += findLocalMinimumWeightFrom(cycle) * (cycle.size() - 2);
-
         return result;
     }
 
-    private static int sumElephantsWeightsIn(List<Integer> cycle) {
+    private static long sumElephantsWeightsIn(List<Integer> cycle) {
 
-        int result = 0;
+        long result = 0;
 
         for (Integer integer : cycle) {
             result += DataContainer.getInstance().getElephantsWeights().get(integer - 1);
@@ -94,26 +87,23 @@ public class Main {
         return result;
     }
 
-    private static int calculateByMergingCycles(List<Integer> cycle) {
+    private static long calculateByMergingCycles(List<Integer> cycle) {
 
-        int result = 0;
-
-        int globalMinWeight = findGlobalMinimumWeight();
+        long result = 0;
 
         result += sumElephantsWeightsIn(cycle);
-
         result += findLocalMinimumWeightFrom(cycle);
         result += globalMinWeight * (cycle.size() + 1);
 
         return result;
     }
 
-    private static int findGlobalMinimumWeight() {
+    private static long findGlobalMinimumWeight() {
 
         return Collections.min(DataContainer.getInstance().getElephantsWeights());
     }
 
-    private static int findLocalMinimumWeightFrom(List<Integer> singleCycle) {
+    private static long findLocalMinimumWeightFrom(List<Integer> singleCycle) {
 
         int elephantIndex = Collections.min(singleCycle, (first, second) -> {
 

@@ -38,9 +38,7 @@ class DataContainer {
         }
 
         elephantsWeights.addAll(fillInList(scanner));
-
         actualOrder.addAll((fillInList(scanner)));
-
         targetOrder.addAll(fillInList(scanner));
     }
 
@@ -53,7 +51,7 @@ class DataContainer {
         }
 
         return list;
-    }
+ }
 
     List<Integer> getElephantsWeights() {
         return elephantsWeights;
@@ -65,5 +63,9 @@ class DataContainer {
 
     List<Integer> getTargetOrder() {
         return targetOrder;
+    }
+
+    int getNumberOfElephants() {
+        return numberOfElephants;
     }
 }

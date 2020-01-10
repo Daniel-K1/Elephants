@@ -48,9 +48,6 @@ class MainTest {
 
         return Stream.of(
                 Arguments.of("slo1.in", "slo1.out"),
-                Arguments.of("slo2.in", "slo2.out"),
-                Arguments.of("slo3.in", "slo3.out"),
-                Arguments.of("slo1.in", "slo1.out"),
                 Arguments.of("slo1ocen.in", "slo1ocen.out"),
                 Arguments.of("slo2.in", "slo2.out"),
                 Arguments.of("slo2ocen.in", "slo2ocen.out"),
